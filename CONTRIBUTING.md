@@ -303,6 +303,288 @@ Releases are handled by maintainers following semantic versioning:
 - **Minor version** (0.x.0): New features, backward compatible
 - **Patch version** (0.0.x): Bug fixes, backward compatible
 
+### For Maintainers: Creating a Release
+
+#### Prerequisites
+
+1. **npm Account**: Ensure you have an npm account with publish permissions
+2. **GitHub Access**: Write access to the repository
+3. **Clean Working Directory**: No uncommitted changes
+4. **All Tests Passing**: Verify CI is green
+
+#### Release Steps
+
+1. **Prepare for Release**
+   ```bash
+   # Ensure you're on main branch
+   git checkout main
+   git pull origin main
+   
+   # Verify everything is working
+   npm install
+   npm test
+   npm run lint
+   npm run build
+   ```
+
+2. **Update Version and Changelog**
+   ```bash
+   # For patch release (1.0.0 -> 1.0.1)
+   npm version patch
+   
+   # For minor release (1.0.0 -> 1.1.0)
+   npm version minor
+   
+   # For major release (1.0.0 -> 2.0.0)
+   npm version major
+   ```
+
+   This automatically:
+   - Updates version in `package.json`
+   - Creates a git tag
+   - Creates a commit
+
+3. **Update CHANGELOG.md**
+   ```bash
+   # Edit CHANGELOG.md to document changes
+   # Add new version section at the top
+   git add CHANGELOG.md
+   git commit -m "docs: update changelog for v1.0.1"
+   ```
+
+4. **Push Changes and Tags**
+   ```bash
+   # Push the version commit and tag
+   git push origin main
+   git push origin --tags
+   ```
+
+5. **Create GitHub Release**
+   - Go to GitHub repository
+   - Click "Releases" → "Create a new release"
+   - Select the tag you just pushed
+   - Title: `v1.0.1` (match the tag)
+   - Description: Copy relevant section from CHANGELOG.md
+   - Check "Set as the latest release" (for stable releases)
+   - Click "Publish release"
+
+6. **Publish to npm**
+   ```bash
+   # Login to npm (if not already)
+   npm login
+   
+   # Verify package contents
+   npm pack --dry-run
+   
+   # Publish to npm
+   npm publish
+   
+   # For beta/alpha releases
+   npm publish --tag beta
+   npm publish --tag alpha
+   ```
+
+7. **Verify Release**
+   ```bash
+   # Check npm
+   npm view smart-selector
+   
+   # Test installation
+   mkdir test-install && cd test-install
+   npm init -y
+   npm install smart-selector
+   node -e "console.log(require('smart-selector'))"
+   cd .. && rm -rf test-install
+   ```
+
+8. **Announce Release**
+   - Update README if needed
+   - Post in relevant channels/communities
+   - Update any dependent projects
+
+#### Automated Release (GitHub Actions)
+
+For automated releases, you can set up GitHub Actions:
+
+```yaml
+# .github/workflows/release.yml
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+#### Release Checklist
+
+- [ ] All tests pass locally and in CI
+- [ ] Version bumped in package.json
+- [ ] CHANGELOG.md updated with new version
+- [ ] Git tag created and pushed
+- [ ] GitHub release created with release notes
+- [ ] Package published to npm
+- [ ] Installation verified
+- [ ] Documentation updated if needed
+
+#### Pre-release Process
+
+For alpha/beta releases:
+
+1. **Create Pre-release Version**
+   ```bash
+   # For alpha
+   npm version prerelease --preid=alpha
+   # Results in: 1.0.1-alpha.0
+   
+   # For beta
+   npm version prerelease --preid=beta
+   # Results in: 1.0.1-beta.0
+   ```
+
+2. **Publish with Tag**
+   ```bash
+   npm publish --tag alpha
+   # or
+   npm publish --tag beta
+   ```
+
+3. **Users can install with**
+   ```bash
+   npm install smart-selector@alpha
+   npm install smart-selector@beta
+   ```
+
+#### Hotfix Process
+
+For urgent fixes:
+
+1. **Create Hotfix Branch**
+   ```bash
+   git checkout -b hotfix/critical-fix
+   ```
+
+2. **Make the Fix**
+   ```bash
+   # Make minimal changes
+   git add .
+   git commit -m "fix: critical security issue"
+   ```
+
+3. **Release Hotfix**
+   ```bash
+   git checkout main
+   git merge hotfix/critical-fix
+   npm version patch
+   git push origin main --tags
+   ```
+
+4. **Emergency Publish**
+   ```bash
+   npm publish
+   ```
+
+#### Version Strategy
+
+- **Patch (1.0.x)**: Bug fixes, documentation updates, internal refactoring
+- **Minor (1.x.0)**: New features, new options, performance improvements
+- **Major (x.0.0)**: Breaking API changes, major architecture changes
+
+#### Rollback Process
+
+If a release has critical issues:
+
+1. **Deprecate Bad Version**
+   ```bash
+   npm deprecate smart-selector@1.0.1 "Critical bug, use 1.0.0 instead"
+   ```
+
+2. **Publish Fixed Version**
+   ```bash
+   # Fix the issue
+   npm version patch
+   npm publish
+   ```
+
+3. **Update GitHub Release**
+   - Mark problematic release as "pre-release"
+   - Create new release for fixed version
+
+#### Release Notes Template
+
+```markdown
+## [1.0.1] - 2025-07-03
+
+### Added
+- New feature X
+- Support for Y
+
+### Changed
+- Improved performance of Z
+- Updated dependencies
+
+### Fixed
+- Fixed issue with A
+- Resolved bug in B
+
+### Breaking Changes
+- None
+
+### Migration Guide
+- No migration needed for this release
+```
+
+#### npm Package Configuration
+
+Ensure `package.json` has proper fields:
+
+```json
+{
+  "name": "smart-selector",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  }
+}
+```
+
 ## Code of Conduct
 
 ### Our Pledge
