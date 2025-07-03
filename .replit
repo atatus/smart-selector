@@ -19,6 +19,10 @@ args = "Install Dependencies"
 task = "workflow.run"
 args = "Demo Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build Library"
+
 [[workflows.workflow]]
 name = "Install Dependencies"
 author = "agent"
@@ -35,6 +39,14 @@ author = "agent"
 task = "shell.exec"
 args = "python3 -m http.server 5000"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Build Library"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node scripts/build.js"
 
 [[ports]]
 localPort = 5000

@@ -1,6 +1,13 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
-import pkg from './package.json';
+
+const pkg = {
+  name: 'smart-selector',
+  version: '1.0.0',
+  description: 'TypeScript library for generating unique CSS selectors',
+  homepage: 'https://github.com/your-username/smart-selector',
+  license: 'MIT'
+};
 
 const banner = `/**
  * ${pkg.name} v${pkg.version}
@@ -26,8 +33,7 @@ export default [
         declaration: true,
         declarationDir: 'dist/types'
       })
-    ],
-    external: []
+    ]
   },
   
   // CommonJS build
@@ -37,14 +43,14 @@ export default [
       file: 'dist/index.cjs.js',
       format: 'cjs',
       banner,
-      sourcemap: true
+      sourcemap: true,
+      exports: 'default'
     },
     plugins: [
       typescript({
         tsconfig: './tsconfig.json'
       })
-    ],
-    external: []
+    ]
   },
   
   // UMD build
@@ -61,30 +67,6 @@ export default [
       typescript({
         tsconfig: './tsconfig.json'
       })
-    ],
-    external: []
-  },
-  
-  // Minified UMD build
-  {
-    input: 'src/index.ts',
-    output: {
-      file: 'dist/index.umd.min.js',
-      format: 'umd',
-      name: 'SmartSelector',
-      banner,
-      sourcemap: true
-    },
-    plugins: [
-      typescript({
-        tsconfig: './tsconfig.json'
-      }),
-      terser({
-        output: {
-          comments: /^!/
-        }
-      })
-    ],
-    external: []
+    ]
   }
 ];
