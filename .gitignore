@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+dist/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+*.tgz
+.idea/
+.vscode/
+coverage/
+lib/
+*.tsbuildinfo
+# Optional: OS or editor files
+Thumbs.db
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
