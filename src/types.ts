@@ -48,7 +48,7 @@ export type SelectorFunction = (element: Element, ...args: any[]) => string | st
 export interface SelectorFunctions {
   Tag: (element: Element) => string | null;
   NthChild: (element: Element) => string | null;
-  Attributes: (element: Element, attributesToIgnore: string[]) => string[];
+  Attributes: (element: Element) => string[];
   Class: (element: Element) => string[];
   ID: (element: Element) => string | null;
 }

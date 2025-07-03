@@ -35,30 +35,35 @@ function getAllSelectors(
   selectorTypes: SelectorType[],
   attributesToIgnore: string[]
 ): ElementSelectors {
-  const functions: SelectorFunctions = {
-    Tag: getTag,
-    NthChild: getNthChild,
-    Attributes: (elem) => getAttributes(elem, attributesToIgnore),
-    Class: getClassSelectors,
-    ID: getID,
+  const result: ElementSelectors = {
+    ID: null,
+    Class: [],
+    Tag: null,
+    Attributes: [],
+    NthChild: null,
   };
 
-  return selectorTypes.reduce(
-    (result, selectorType) => {
-      const func = functions[selectorType];
-      if (func) {
-        result[selectorType] = func(element) as any;
-      }
-      return result;
-    },
-    {
-      ID: null,
-      Class: [],
-      Tag: null,
-      Attributes: [],
-      NthChild: null,
-    } as ElementSelectors
-  );
+  for (const selectorType of selectorTypes) {
+    switch (selectorType) {
+      case 'ID':
+        result.ID = getID(element);
+        break;
+      case 'Class':
+        result.Class = getClassSelectors(element);
+        break;
+      case 'Tag':
+        result.Tag = getTag(element);
+        break;
+      case 'NthChild':
+        result.NthChild = getNthChild(element);
+        break;
+      case 'Attributes':
+        result.Attributes = getAttributes(element, attributesToIgnore);
+        break;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -249,9 +254,6 @@ export default function smartSelector(
 // Named exports for additional utility
 export {
   smartSelector,
-  SmartSelectorOptions,
-  SelectorType,
-  ElementSelectors,
   isElement,
   getID,
   getClassSelectors,
@@ -261,4 +263,11 @@ export {
   getCombinations,
   getParents,
   isUnique,
+};
+
+// Type exports
+export type {
+  SmartSelectorOptions,
+  SelectorType,
+  ElementSelectors,
 };

@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/types.ts","./src/utils/getAttributes.ts","./src/utils/getClasses.ts","./src/utils/getCombinations.ts","./src/utils/getID.ts","./src/utils/getNthChild.ts","./src/utils/getParents.ts","./src/utils/getTag.ts","./src/utils/isElement.ts","./src/utils/isUnique.ts"],"version":"5.8.3"}
