@@ -47,16 +47,19 @@ const cjsContent = `${banner}\n${mainFile}`;
 fs.writeFileSync('dist/index.cjs.js', cjsContent);
 
 // Create UMD version
-const umdContent = `${banner}
+const umdWrapper = `${banner}
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.SmartSelector = {}));
 }(this, (function (exports) { 'use strict';
 
-${mainFile.replace(/^export\s+/gm, 'exports.')}
+// UMD module content
+${mainFile.replace(/export\s+default/g, 'exports.default =').replace(/export\s+/g, 'exports.')}
 
 })));`;
+
+const umdContent = umdWrapper;
 
 fs.writeFileSync('dist/index.umd.js', umdContent);
 

@@ -44,7 +44,7 @@ export default [
       format: 'cjs',
       banner,
       sourcemap: true,
-      exports: 'default'
+      exports: 'named'
     },
     plugins: [
       typescript({
