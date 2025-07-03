@@ -30,8 +30,8 @@ const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const banner = `/**
  * ${pkg.name} v${pkg.version}
  * ${pkg.description}
- * ${pkg.homepage || 'https://github.com/your-username/smart-selector'}
- * 
+ * ${pkg.homepage || 'https://github.com/atatus/smart-selector'}
+ *
  * @license ${pkg.license}
  */`;
 

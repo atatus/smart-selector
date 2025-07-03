@@ -32,48 +32,48 @@ log_error() {
 # Check if we have the required tools
 check_dependencies() {
     log_info "Checking dependencies..."
-    
+
     if ! command -v node &> /dev/null; then
         log_error "Node.js is not installed"
         exit 1
     fi
-    
+
     if ! command -v npm &> /dev/null; then
         log_error "npm is not installed"
         exit 1
     fi
-    
+
     if ! command -v git &> /dev/null; then
         log_error "git is not installed"
         exit 1
     fi
-    
+
     log_success "All dependencies are available"
 }
 
 # Check if we're on the main branch
 check_branch() {
     log_info "Checking git branch..."
-    
+
     current_branch=$(git branch --show-current)
     if [ "$current_branch" != "main" ]; then
         log_error "You must be on the main branch to create a release. Current branch: $current_branch"
         exit 1
     fi
-    
+
     log_success "On main branch"
 }
 
 # Check if working directory is clean
 check_working_directory() {
     log_info "Checking working directory..."
-    
+
     if ! git diff-index --quiet HEAD --; then
         log_error "Working directory is not clean. Please commit or stash your changes."
         git status --porcelain
         exit 1
     fi
-    
+
     log_success "Working directory is clean"
 }
 
@@ -104,9 +104,9 @@ build_project() {
 # Update version
 update_version() {
     local version_type=$1
-    
+
     log_info "Updating version ($version_type)..."
-    
+
     case $version_type in
         patch|minor|major)
             npm version $version_type --no-git-tag-version
@@ -120,7 +120,7 @@ update_version() {
             exit 1
             ;;
     esac
-    
+
     local new_version=$(node -p "require('./package.json').version")
     log_success "Version updated to $new_version"
     echo $new_version
@@ -137,20 +137,20 @@ update_changelog() {
 # Create git tag and commit
 create_tag() {
     local version=$1
-    
+
     log_info "Creating git commit and tag for version $version..."
-    
+
     git add package.json CHANGELOG.md
     git commit -m "chore: release v$version"
     git tag "v$version"
-    
+
     log_success "Created commit and tag v$version"
 }
 
 # Push changes
 push_changes() {
     local version=$1
-    
+
     log_info "Pushing changes and tags..."
     git push origin main
     git push origin "v$version"
@@ -160,19 +160,19 @@ push_changes() {
 # Publish to npm
 publish_npm() {
     local version_type=$1
-    
+
     log_info "Publishing to npm..."
-    
+
     # Check if logged in to npm
     if ! npm whoami &> /dev/null; then
         log_error "You are not logged in to npm. Please run 'npm login' first."
         exit 1
     fi
-    
+
     # Verify package contents
     log_info "Verifying package contents..."
     npm pack --dry-run
-    
+
     # Publish
     case $version_type in
         prerelease)
@@ -182,22 +182,22 @@ publish_npm() {
             npm publish
             ;;
     esac
-    
+
     log_success "Package published to npm"
 }
 
 # Verify installation
 verify_installation() {
     log_info "Verifying installation..."
-    
+
     # Create temporary directory for testing
     temp_dir=$(mktemp -d)
     cd "$temp_dir"
-    
+
     # Initialize npm and install the package
     npm init -y > /dev/null 2>&1
     npm install smart-selector > /dev/null 2>&1
-    
+
     # Test if package works
     if node -e "console.log(require('smart-selector'))" > /dev/null 2>&1; then
         log_success "Package installation verified"
@@ -205,7 +205,7 @@ verify_installation() {
         log_error "Package installation verification failed"
         exit 1
     fi
-    
+
     # Clean up
     cd - > /dev/null
     rm -rf "$temp_dir"
@@ -214,41 +214,41 @@ verify_installation() {
 # Main release function
 main() {
     local version_type=${1:-patch}
-    
+
     log_info "Starting release process for smart-selector..."
     log_info "Version type: $version_type"
-    
+
     # Pre-release checks
     check_dependencies
     check_branch
     check_working_directory
     pull_latest
-    
+
     # Run tests and build
     run_tests
     build_project
-    
+
     # Update version
     local new_version=$(update_version $version_type)
-    
+
     # Update changelog
     update_changelog $new_version
-    
+
     # Create tag and commit
     create_tag $new_version
-    
+
     # Push changes
     push_changes $new_version
-    
+
     # Publish to npm
     publish_npm $version_type
-    
+
     # Verify installation
     verify_installation
-    
+
     log_success "Release v$new_version completed successfully!"
     log_info "Next steps:"
-    log_info "1. Create GitHub release at: https://github.com/your-username/smart-selector/releases/new?tag=v$new_version"
+    log_info "1. Create GitHub release at: https://github.com/atatus/smart-selector/releases/new?tag=v$new_version"
     log_info "2. Announce the release"
     log_info "3. Update any dependent projects"
 }

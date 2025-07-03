@@ -43,13 +43,13 @@
   ],
   "author": "Smart Selector Contributors",
   "license": "MIT",
-  "homepage": "https://github.com/your-username/smart-selector",
+  "homepage": "https://github.com/atatus/smart-selector",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/smart-selector.git"
+    "url": "git+https://github.com/atatus/smart-selector.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/smart-selector/issues"
+    "url": "https://github.com/atatus/smart-selector/issues"
   },
   "engines": {
     "node": ">=12.0.0"

@@ -1,8 +1,8 @@
 /**
  * smart-selector v1.0.0
  * TypeScript library for generating unique CSS selectors
- * https://github.com/your-username/smart-selector
- * 
+ * https://github.com/atatus/smart-selector
+ *
  * @license MIT
  */
 /**

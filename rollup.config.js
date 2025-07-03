@@ -5,7 +5,7 @@ const pkg = {
   name: 'smart-selector',
   version: '1.0.0',
   description: 'TypeScript library for generating unique CSS selectors',
-  homepage: 'https://github.com/your-username/smart-selector',
+  homepage: 'https://github.com/atatus/smart-selector',
   license: 'MIT'
 };
 
@@ -13,7 +13,7 @@ const banner = `/**
  * ${pkg.name} v${pkg.version}
  * ${pkg.description}
  * ${pkg.homepage}
- * 
+ *
  * @license ${pkg.license}
  */`;
 
@@ -35,7 +35,7 @@ export default [
       })
     ]
   },
-  
+
   // CommonJS build
   {
     input: 'src/index.ts',
@@ -52,7 +52,7 @@ export default [
       })
     ]
   },
-  
+
   // UMD build
   {
     input: 'src/index.ts',

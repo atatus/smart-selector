@@ -35,7 +35,7 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/your-username/smart-selector.git
+   git clone https://github.com/atatus/smart-selector.git
    cd smart-selector
    ```
 
@@ -82,13 +82,13 @@ Pull requests are the best way to propose changes to the codebase. We actively w
    ```bash
    # Run tests
    npm test
-   
+
    # Run tests with coverage
    npm run test:coverage
-   
+
    # Run linting
    npm run lint
-   
+
    # Format code
    npm run format
    ```
@@ -319,7 +319,7 @@ Releases are handled by maintainers following semantic versioning:
    # Ensure you're on main branch
    git checkout main
    git pull origin main
-   
+
    # Verify everything is working
    npm install
    npm test
@@ -331,10 +331,10 @@ Releases are handled by maintainers following semantic versioning:
    ```bash
    # For patch release (1.0.0 -> 1.0.1)
    npm version patch
-   
+
    # For minor release (1.0.0 -> 1.1.0)
    npm version minor
-   
+
    # For major release (1.0.0 -> 2.0.0)
    npm version major
    ```
@@ -372,13 +372,13 @@ Releases are handled by maintainers following semantic versioning:
    ```bash
    # Login to npm (if not already)
    npm login
-   
+
    # Verify package contents
    npm pack --dry-run
-   
+
    # Publish to npm
    npm publish
-   
+
    # For beta/alpha releases
    npm publish --tag beta
    npm publish --tag alpha
@@ -388,7 +388,7 @@ Releases are handled by maintainers following semantic versioning:
    ```bash
    # Check npm
    npm view smart-selector
-   
+
    # Test installation
    mkdir test-install && cd test-install
    npm init -y
@@ -424,16 +424,16 @@ jobs:
         with:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run tests
         run: npm test
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Publish to npm
         run: npm publish
         env:
@@ -460,7 +460,7 @@ For alpha/beta releases:
    # For alpha
    npm version prerelease --preid=alpha
    # Results in: 1.0.1-alpha.0
-   
+
    # For beta
    npm version prerelease --preid=beta
    # Results in: 1.0.1-beta.0

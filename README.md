@@ -1,6 +1,6 @@
 # Smart Selector
 
-[![Build Status](https://img.shields.io/github/workflow/status/your-username/smart-selector/CI)](https://github.com/your-username/smart-selector/actions)
+[![Build Status](https://img.shields.io/github/workflow/status/atatus/smart-selector/CI)](https://github.com/atatus/smart-selector/actions)
 [![npm version](https://img.shields.io/npm/v/smart-selector.svg)](https://www.npmjs.com/package/smart-selector)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -128,7 +128,7 @@ const selector = smartSelector(element, {
 ```typescript
 document.addEventListener('click', (event) => {
   const selector = smartSelector(event.target as Element);
-  
+
   // Send to analytics
   analytics.track('Element Clicked', {
     selector: selector,
@@ -140,11 +140,11 @@ document.addEventListener('click', (event) => {
 ### Using Named Exports
 
 ```typescript
-import { 
-  smartSelector, 
-  getID, 
-  getClassSelectors, 
-  isUnique 
+import {
+  smartSelector,
+  getID,
+  getClassSelectors,
+  isUnique
 } from 'smart-selector';
 
 // Use individual utility functions
@@ -247,7 +247,7 @@ This creates multiple output formats:
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/smart-selector.git
+git clone https://github.com/atatus/smart-selector.git
 cd smart-selector
 ```
 
@@ -352,7 +352,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ### Reporting Issues
 
-Please use the [GitHub Issues](https://github.com/your-username/smart-selector/issues) page to report bugs or request features.
+Please use the [GitHub Issues](https://github.com/atatus/smart-selector/issues) page to report bugs or request features.
 
 ## Credits
 
